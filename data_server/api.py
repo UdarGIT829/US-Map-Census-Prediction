@@ -16,9 +16,9 @@ from fastapi import FastAPI, Query, HTTPException
 from fastapi.responses import JSONResponse
 import duckdb
 
-from duck_writer import write_row_and_get_query
+from data_server.duck_writer import write_row_and_get_query
 # Reuse the fetch + discovery from your helper script
-from acs_loader import (
+from data_server.acs_loader import (
     fetch_or_cache, GROUPS, YEAR, list_counties_for_state,
     list_acs_years_for_state, list_acs_years_for_county,
     build_delta_sql

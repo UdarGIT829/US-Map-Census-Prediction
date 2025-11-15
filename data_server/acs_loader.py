@@ -1,6 +1,6 @@
 import os, json, time, pathlib, urllib.parse, urllib.request
-from duck_writer import write_row_and_get_query
-from duck_writer import kv_get, kv_set
+from data_server.duck_writer import write_row_and_get_query
+from data_server.duck_writer import kv_get, kv_set
 import urllib.error, http.client, random
 
 RETRY_MAX = 5
