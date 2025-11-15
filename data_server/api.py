@@ -16,7 +16,8 @@ from fastapi import FastAPI, Query, HTTPException
 from fastapi.responses import JSONResponse
 import duckdb
 
-from data_server.duck_writer import write_row_and_get_query
+from data_server.db_router import state_conn, county_conn
+from data_server.duck_writer import STATE_TABLE_NAME, COUNTY_TABLE_NAME
 # Reuse the fetch + discovery from your helper script
 from data_server.acs_loader import (
     fetch_or_cache, GROUPS, YEAR, list_counties_for_state,
@@ -207,10 +208,7 @@ def get_state(
     yr = int(year if year is not None else YEAR)
     _validate_year_for_state(state_fips, yr)
 
-    # 1) Ensure data exists / cache populated (no-op if cached)
-    row, _ = fetch_or_cache(str(yr), "state", GROUPS, state_fips=state_fips)
-
-    # 2) Get exact SQL that targets this slice
+    row, from_cache = fetch_or_cache(...)
     sql = write_row_and_get_query(
         row,
         year=yr,
@@ -219,20 +217,14 @@ def get_state(
         county_fips=None,
     )
 
-    if query_only:
-        return {"sql": sql}
-
-    # 3) Execute and return the full wide row
-    con = _conn()
+    con = state_conn()
     try:
         rel = con.sql(sql)
         cols = rel.columns
         data = rel.fetchall()
-        if not data:
-            return JSONResponse(content={"error": "No row found after write"}, status_code=404)
-        return dict(zip(cols, data[0]))
     finally:
         con.close()
+
 
 @app.get("/data/county/{state_fips}/{county_fips}")
 def get_county(
@@ -245,10 +237,7 @@ def get_county(
     _validate_county_code(state_fips, county_fips, yr)
     _validate_year_for_county(state_fips, county_fips, yr)
 
-    # 1) Ensure data exists / cache populated (no-op if cached)
-    row, _ = fetch_or_cache(str(yr), "county", GROUPS, state_fips=state_fips, county_fips=county_fips)
-
-    # 2) Get exact SQL for this county slice
+    row, from_cache = fetch_or_cache(...)
     sql = write_row_and_get_query(
         row,
         year=yr,
@@ -257,20 +246,14 @@ def get_county(
         county_fips=county_fips,
     )
 
-    if query_only:
-        return {"sql": sql}
-
-    # 3) Execute and return the full wide row
-    con = _conn()
+    con = county_conn(state_fips)
     try:
         rel = con.sql(sql)
         cols = rel.columns
         data = rel.fetchall()
-        if not data:
-            return JSONResponse(content={"error": "No row found after write"}, status_code=404)
-        return dict(zip(cols, data[0]))
     finally:
         con.close()
+        
         
 # ---- Delta endpoints ----
 @app.get("/delta/state/{state_fips}")
