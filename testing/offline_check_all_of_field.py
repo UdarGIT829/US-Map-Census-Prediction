@@ -7,6 +7,7 @@ from threading import Lock
 
 # ---- Import shared logic from your existing code ----
 from data_server.api import VALID_STATE_FIPS  # same canonical list your API uses
+from data_server.acs_loader import list_counties_for_state
 
 from data_server.acs_loader import (
     GROUPS,
@@ -75,6 +76,23 @@ def get_states() -> List[str]:
     Uses the same VALID_STATE_FIPS set that the API exposes.
     """
     return [s for s in sorted(VALID_STATE_FIPS, key=lambda x: int(x))]
+
+def get_counties(state_fips: str, year: int) -> List[Dict[str, str]]:
+    """
+    Offline version of GET /counties/{state_fips}?year=YEAR.
+
+    Uses acs_loader.list_counties_for_state(year, state_fips),
+    which returns {county_fips -> NAME}, and converts to the
+    list-of-dicts shape used by the old HTTP version:
+    [{"county": "001", "NAME": "Foo County"}, ...]
+    """
+    mapping = list_counties_for_state(str(year), state_fips)  # dict[str, str]
+
+    items: List[Dict[str, str]] = [
+        {"county": c, "NAME": name}
+        for c, name in sorted(mapping.items(), key=lambda kv: int(kv[0]))
+    ]
+    return items
 
 
 def get_years_for_state(state_fips: str) -> List[int]:
