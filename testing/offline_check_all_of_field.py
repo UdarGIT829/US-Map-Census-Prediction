@@ -88,16 +88,15 @@ def get_years_for_state(state_fips: str) -> List[int]:
 
 
 def get_state_data(state_fips: str, year: int) -> Dict[str, Any]:
-    """
-    Offline version of GET /data/state/{state_fips}?year=YEAR.
-
-    1) Uses fetch_or_cache(...) to get the wide ACS row (and populate KV cache)
-    2) Calls write_row_and_get_query(...) so the row is written to DuckDB
-    3) Returns the row dict directly (we don't bother re-reading from DB)
-    """
     year_str = str(year)
     row, from_cache = fetch_or_cache(year_str, "state", GROUPS, state_fips=state_fips)
-    # Ensure it's actually stored in acs5_profile:
+
+    # make sure the row we return has the IDs
+    row = dict(row)
+    row["geo_level"] = "state"
+    row["year"] = int(year)
+    row["state"] = str(state_fips).zfill(2)
+
     _ = write_row_and_get_query(
         row,
         year=year,
@@ -108,21 +107,28 @@ def get_state_data(state_fips: str, year: int) -> Dict[str, Any]:
     return row
 
 
-def get_counties(state_fips: str, year: int) -> List[Dict[str, str]]:
-    """
-    Offline version of GET /counties/{state_fips}?year=YEAR.
+def get_county_data(state_fips: str, county_fips: str, year: int) -> Dict[str, Any]:
+    year_str = str(year)
+    row, from_cache = fetch_or_cache(
+        year_str, "county", GROUPS,
+        state_fips=state_fips, county_fips=county_fips,
+    )
 
-    Uses acs_loader.list_counties_for_state(year, state_fips),
-    which returns {county_fips -> NAME}, and converts to the
-    list-of-dicts shape used by the old HTTP version:
-    [{"county": "001", "NAME": "Foo County"}, ...]
-    """
-    mapping = list_counties_for_state(str(year), state_fips)  # dict[str, str]
-    items = [
-        {"county": c, "NAME": name}
-        for c, name in sorted(mapping.items(), key=lambda kv: int(kv[0]))
-    ]
-    return items
+    row = dict(row)
+    row["geo_level"] = "county"
+    row["year"] = int(year)
+    row["state"] = str(state_fips).zfill(2)
+    row["county"] = str(county_fips).zfill(3)
+
+    _ = write_row_and_get_query(
+        row,
+        year=year,
+        geo_level="county",
+        state_fips=state_fips,
+        county_fips=county_fips,
+    )
+    return row
+
 
 
 def get_years_for_county(state_fips: str, county_fips: str) -> List[int]:

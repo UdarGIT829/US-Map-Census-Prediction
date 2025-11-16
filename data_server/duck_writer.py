@@ -35,18 +35,29 @@ def _ensure_table(con: duckdb.DuckDBPyConnection, table: str, columns: Iterable[
         );
     """)
 
-    # Add any missing columns from `columns`.
-    existing_cols = {
-        row[0] for row in con.execute(f"PRAGMA table_info('{table}')").fetchall()
-    }
+    # DuckDB's PRAGMA table_info returns rows like:
+    # (column_index, column_name, column_type, ...),
+    # so we need row[1] for the *name*.
+    info = con.execute(f"PRAGMA table_info('{table}')").fetchall()
+    existing_cols = {row[1] for row in info}
 
     for col in columns:
-        if col in existing_cols:
-            continue
-        # All non-ID, non-NAME columns are TEXT for now (matches your current behavior)
+        # Skip known ID/label columns; they're already in the CREATE TABLE
         if col in ("geo_level", "year", "state", "county", "NAME"):
             continue
-        con.execute(f"ALTER TABLE {table} ADD COLUMN {col} TEXT;")
+        if col in existing_cols:
+            continue
+
+        try:
+            con.execute(f'ALTER TABLE {table} ADD COLUMN "{col}" TEXT;')
+            existing_cols.add(col)
+        except Exception as e:
+            # In case of a race (another process added it just now),
+            # ignore "already exists" and continue.
+            if "already exists" in str(e):
+                existing_cols.add(col)
+                continue
+            raise
 
 
 def write_row_and_get_query(
