@@ -115,3 +115,38 @@ def write_row_and_get_query(
 
     finally:
         con.close()
+
+
+# ---- Minimal KV cache ----
+def _ensure_kv(con):
+    con.execute("""
+        CREATE TABLE IF NOT EXISTS cache_kv (
+          key TEXT PRIMARY KEY,
+          value TEXT,
+          updated_at TIMESTAMP DEFAULT current_timestamp
+        )
+    """)
+
+def kv_get(key: str, db_path: str = DB_PATH) -> str | None:
+    con = _open_conn(db_path)
+    try:
+        _ensure_kv(con)
+        row = con.execute("SELECT value FROM cache_kv WHERE key = ?", [key]).fetchone()
+        return row[0] if row else None
+    finally:
+        con.close()
+
+def kv_set(key: str, value_json: str, db_path: str = DB_PATH) -> None:
+    con = _open_conn(db_path)
+    try:
+        _ensure_kv(con)
+        # Upsert emulation: delete then insert (atomic via transaction)
+        con.execute("BEGIN")
+        con.execute("DELETE FROM cache_kv WHERE key = ?", [key])
+        con.execute("INSERT INTO cache_kv(key, value) VALUES (?, ?)", [key, value_json])
+        con.execute("COMMIT")
+    except Exception:
+        con.execute("ROLLBACK")
+        raise
+    finally:
+        con.close()
