@@ -12,6 +12,12 @@ DB_PATH = "./acs_cache.duckdb"
 STATE_TABLE_NAME = "acs5_state_profile"
 COUNTY_TABLE_NAME = "acs5_county_profile"
 
+def _open_conn(db_path: str = DB_PATH):
+    con = duckdb.connect(db_path)
+    
+    con.execute("PRAGMA threads=4")
+    con.execute("SET memory_limit='4GB'")
+    return con
 
 def _ensure_table(con: duckdb.DuckDBPyConnection, table: str, columns: Iterable[str]) -> None:
     """
