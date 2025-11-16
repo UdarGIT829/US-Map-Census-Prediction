@@ -16,7 +16,7 @@ from fastapi import FastAPI, Query, HTTPException
 from fastapi.responses import JSONResponse
 import duckdb
 
-from data_server.db_router import state_conn, county_conn
+from data_server.duck_router import state_conn, county_conn
 from data_server.duck_writer import STATE_TABLE_NAME, COUNTY_TABLE_NAME
 # Reuse the fetch + discovery from your helper script
 from data_server.acs_loader import (
@@ -253,7 +253,7 @@ def get_county(
         data = rel.fetchall()
     finally:
         con.close()
-        
+
         
 # ---- Delta endpoints ----
 @app.get("/delta/state/{state_fips}")
