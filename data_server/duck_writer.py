@@ -4,7 +4,7 @@ from __future__ import annotations
 import duckdb
 from typing import Iterable
 
-from data_server.db_router import state_conn, county_conn
+from data_server.duck_router import state_conn, county_conn
 
 # You can keep these if other code imports them, but they're unused now:
 DB_PATH = "./acs_cache.duckdb"
