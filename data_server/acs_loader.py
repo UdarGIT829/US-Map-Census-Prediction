@@ -64,9 +64,9 @@ def get_group_variables(year, group):
 def discover_all_vars(year, groups):
     all_vars = []
     for g in groups:
-        print(f"[meta] discovering {g} …")
+        # print(f"[meta] discovering {g} …")
         gvars = get_group_variables(year, g)
-        print(f"       {g}: {len(gvars)} vars")
+        # print(f"       {g}: {len(gvars)} vars")
         all_vars.extend(gvars)
     return all_vars
 
