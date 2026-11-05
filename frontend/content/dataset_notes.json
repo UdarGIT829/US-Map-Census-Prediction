@@ -1,0 +1,63 @@
+{
+  "_about": "Explanations shown under the Dataset tab's dropdowns. Keyed by loader, then by metric / site / year. Years only need an entry when something is wrong; every other year is summarized as 'No problems.' 'acs_years' notes apply to every dataset (Census-side changes) and are appended to that year's line. Numbers come from the bundled demo runs (res://demo/) and the capstone report.",
+  "intro": "Pick a dataset to see where it comes from, what it measures and what the analysis found. Notes update as you choose years, metrics and sites.",
+  "acs_years": {
+    "2020": "ACS change: DP05's race and ethnicity questions were redesigned between the 2019 and 2020 vintages, so DP05 race features aren't directly comparable across that boundary.",
+    "2023": "ACS change: the 2023 vintage added new variables and renumbered existing ones at the end of the tables. Labels are fetched per vintage, so features stay correctly named."
+  },
+  "loaders": {
+    "cancer": {
+      "title": "Cancer incidence",
+      "source": "CDC WONDER, United States and Puerto Rico Cancer Statistics (USCS), 1999–2022: new cancer cases per state for 104 cancer sites (50 states + DC).",
+      "meaning": "The target is the raw number of new cases in each state for the chosen site and year, paired with the ACS 5-year estimates of the same vintage.",
+      "results": "Ten sites analyzed, 2016–2022. Nine are strong and stable (mean R² 0.89–0.99), but largely driven by state size (see the metric note): the top screened features are population-scale counts such as households receiving Social Security. Melanoma is the exception, which makes it the most interesting site. The screening layer's minimum-correlation guard and Phase 2's combination scoring exist largely because of datasets like this one.",
+      "metrics": {
+        "count": "Raw count of new cases per state, not a rate. CDC WONDER can produce age-adjusted rates per 100,000, but the export used here contains counts only, so bigger states always have more cases (2022 lung: California 15,999 vs Wyoming 278). That population confounding is why the strongest features are other population-scale counts. Next step: re-export age-adjusted rates, or divide by ACS total population after the join, to separate real demographic signal from state size."
+      },
+      "sites": {
+        "All Invasive Cancer Sites Combined": "The baseline for every other site. Screening converged every year with 91–102 features passing FDR, and households receiving Social Security led in all seven years (|r| ≈ 0.997). CatBoost recipes averaged R² 0.96–0.97 (best 0.98–0.99): total cancer incidence tracks state size almost perfectly.",
+        "Brain and Other Nervous System": "Despite being one of the rarer sites analyzed, it behaves like the common ones: 95–105 features pass FDR, led by total housing units every year, and recipes average R² 0.96–0.98 (best 0.99). Even ~23,000 cases a year are enough for population size to dominate.",
+        "Colon and Rectum": "Among the most stable sites: 91–106 features pass FDR, total housing units leads every year, and recipes average R² 0.98–0.99 (best 0.99+) with almost no year-to-year movement.",
+        "Female Breast": "The most stable site in the project: 97–99 features pass FDR every year, led by total households, and recipes average R² 0.98–0.99 (best ≈ 0.995) in all seven years.",
+        "Liver and Intrahepatic Bile Duct": "Strong but a step below most sites: recipes average R² 0.90–0.93 (best 0.96–0.99). The leading features shift toward population totals broken down by race and ancestry rather than household counts.",
+        "Lung and Bronchus": "Screening converged every year with 91–97 features passing FDR correction, led by households receiving Social Security and Supplemental Security Income (|r| ≈ 0.98). CatBoost recipes averaged R² 0.92–0.94 per year (best 0.95–0.97).",
+        "Melanoma of the Skin": "The outlier. Screening looks as strong as every other site (98–106 features pass FDR, |r| ≈ 0.98, led by households earning $75,000–$99,999), yet cross-validated models barely predict it: mean R² swings from −0.03 (2017) to 0.43 (2019), best 0.39–0.75. It's the only site where population-scale features don't explain incidence, which fits melanoma depending on factors that don't scale with state size.",
+        "Pancreas": "Strong and stable: 95–102 features pass FDR, households receiving Social Security lead every year, and recipes average R² 0.97–0.98 (best 0.99).",
+        "Prostate": "Strong and stable (recipes average R² 0.95–0.97, best 0.98–0.99), with a distinct pair of leading features in all seven years: the non-Hispanic/Latino population and nonfamily households.",
+        "Thyroid": "Strong but more variable than most (recipes average R² 0.89–0.94, best 0.95–0.98). Leading features are population totals by race and ancestry, as with liver."
+      },
+      "site_default": "This site hasn't been analyzed yet. Run Screen and Train with the local servers to generate results.",
+      "years": {
+        "2020": "COVID-19 disrupted cancer screening and diagnosis, and CDC advises caution with 2020 incidence counts. Across the ten analyzed sites, model performance showed no consistent 2020 drop."
+      }
+    },
+    "opioid": {
+      "title": "Opioid overdose deaths",
+      "source": "CDC WONDER, 2018–2023: opioid overdose deaths per state with crude and age-adjusted rates (50 states + DC). CDC suppresses states with fewer than 10 deaths, so small states can drop out of some years.",
+      "meaning": "The target is the overdose death rate for each state and year, paired with the ACS 5-year estimates of the same vintage.",
+      "results": "Weak, but not empty. Correlations with Census features were low across the board (mean |r| ≈ 0.15, strongest only 0.3–0.48), no feature passed FDR correction in any year, and screening never converged. CatBoost recipes averaged R² near zero, yet the best recipes reached about 0.6 every year: real signal exists, but only in a few specific feature combinations, which is what the recipe sampler is built to find.",
+      "metrics": {
+        "age_adjusted_rate": "Deaths per 100,000 people, age-adjusted. Recommended: without it, states with older populations would score high on every age-related ACS feature.",
+        "crude_rate": "Deaths per 100,000 people, not age-adjusted.",
+        "deaths": "Raw death count. Strongly tied to state population, so large-state ACS variables score highly for the wrong reasons."
+      },
+      "years": {
+        "2023": "Results collapse: mean R² −0.44, and screening stopped after only 5 rounds with the top features shifting to sex ratio and median age. The cause hasn't been confirmed, so treat 2023 with caution."
+      }
+    },
+    "ufo": {
+      "title": "UFO sightings",
+      "source": "National UFO Reporting Center (NUFORC) public reports, geocoded to states. Public data runs through 2016; from 2017 NUFORC moved to on-request access. Sightings are summed over the 5-year window matching each ACS vintage (ACS 2013 ↔ sightings 2009–2013, and so on).",
+      "meaning": "A stress test: a target with no clear causal link to the Census, so anything the pipeline finds most likely reflects reporting bias (who reports sightings, and where) rather than cause. The target is each state's sighting count, normalized by ACS total population after the join.",
+      "results": "Meant as a stress test, it turned out to be one of the most interesting datasets in the project. Screening is stable every year (about 100 features pass, led by Scottish and Welsh ancestry, White population and home values), but how well those features predict sightings falls every year, from mean R² 0.17 (best 0.80) in 2013 to −0.87 (best 0.04) in 2016.",
+      "metrics": {
+        "raw_count": "Number of reported sightings in the state over the 5-year window."
+      },
+      "years": {
+        "2014": "Signal weakening: mean R² −0.24 (best 0.51).",
+        "2015": "Signal weakening: mean R² −0.53 (best 0.25).",
+        "2016": "Signal collapses: mean R² −0.87 (best 0.04). The capstone report attributes this to a breakdown in data availability rather than the method: in 2017 NUFORC began requiring permission for access to its full dataset."
+      }
+    }
+  }
+}

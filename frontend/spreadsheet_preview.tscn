@@ -1,0 +1,50 @@
+[gd_scene load_steps=2 format=3 uid="uid://bgumvyo244bvh"]
+
+[ext_resource type="Script" uid="uid://b8bv3ub0q5fyu" path="res://scripts/controls/spreadsheet_preview-script.gd" id="1_6t14s"]
+
+[node name="Spreadsheet-Preview" type="VBoxContainer"]
+offset_right = 921.6
+offset_bottom = 487.4
+script = ExtResource("1_6t14s")
+
+[node name="Controls" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="GroupContainer" type="VBoxContainer" parent="Controls"]
+custom_minimum_size = Vector2(138, 62)
+layout_mode = 2
+
+[node name="GroupLabel" type="RichTextLabel" parent="Controls/GroupContainer"]
+custom_minimum_size = Vector2(138, 31)
+layout_mode = 2
+text = "Group"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GroupInput" type="OptionButton" parent="Controls/GroupContainer"]
+custom_minimum_size = Vector2(138, 31)
+layout_mode = 2
+alignment = 1
+
+[node name="YearContainer" type="VBoxContainer" parent="Controls"]
+custom_minimum_size = Vector2(138, 62)
+layout_mode = 2
+
+[node name="YearLabel" type="RichTextLabel" parent="Controls/YearContainer"]
+custom_minimum_size = Vector2(138, 31)
+layout_mode = 2
+text = "Year"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="YearInput" type="LineEdit" parent="Controls/YearContainer"]
+custom_minimum_size = Vector2(138, 31)
+layout_mode = 2
+placeholder_text = "0"
+alignment = 1
+
+[node name="Identifiers" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Tree" type="Tree" parent="."]
+layout_mode = 2

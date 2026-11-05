@@ -1,0 +1,188 @@
+[gd_scene load_steps=6 format=3 uid="uid://b0sjtkmylun5p"]
+
+[ext_resource type="Texture2D" uid="uid://btje5ee5iwwaj" path="res://icons/Danger sign 2 256 px.png" id="1_5uudm"]
+[ext_resource type="Script" uid="uid://b8rdfj2tjhxui" path="res://scripts/controls/indicator_script.gd" id="1_x1r5u"]
+[ext_resource type="Script" uid="uid://bs7af8v15ojwl" path="res://scripts/controls/indicator_bar_symbol_STDDEV-script.gd" id="2_2rtx3"]
+[ext_resource type="Script" uid="uid://dxhralum1aqsj" path="res://scripts/controls/indicator_bar_symbol_SCORES-script.gd" id="4_2rtx3"]
+[ext_resource type="Texture2D" uid="uid://drc5x36djue0k" path="res://icons/Alarm 256 px.png" id="5_1isug"]
+
+[node name="IndicatorBar" type="HBoxContainer"]
+custom_minimum_size = Vector2(160, 40)
+size_flags_horizontal = 3
+size_flags_vertical = 0
+alignment = 1
+script = ExtResource("1_x1r5u")
+
+[node name="Indicator-BarSymbol-STDDEV" type="Control" parent="."]
+custom_minimum_size = Vector2(41, 41)
+layout_mode = 2
+size_flags_vertical = 4
+script = ExtResource("2_2rtx3")
+
+[node name="TooltipContainer" type="CenterContainer" parent="Indicator-BarSymbol-STDDEV"]
+visible = false
+z_index = 1
+layout_mode = 0
+offset_left = 42.0
+offset_right = 142.0
+offset_bottom = 54.0
+
+[node name="TextureRect" type="ColorRect" parent="Indicator-BarSymbol-STDDEV/TooltipContainer"]
+custom_minimum_size = Vector2(100, 54)
+layout_mode = 2
+color = Color(0.24, 0.24, 0.24, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Indicator-BarSymbol-STDDEV/TooltipContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Indicator-BarSymbol-STDDEV/TooltipContainer/HBoxContainer"]
+custom_minimum_size = Vector2(55, 54)
+layout_mode = 2
+
+[node name="AVG-Label" type="RichTextLabel" parent="Indicator-BarSymbol-STDDEV/TooltipContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 8
+text = "Average: "
+fit_content = true
+autowrap_mode = 0
+
+[node name="STDDEV-Label" type="RichTextLabel" parent="Indicator-BarSymbol-STDDEV/TooltipContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 8
+text = "Standard Deviation: "
+fit_content = true
+autowrap_mode = 0
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Indicator-BarSymbol-STDDEV/TooltipContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="AVG-Value" type="RichTextLabel" parent="Indicator-BarSymbol-STDDEV/TooltipContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/normal_font_size = 8
+text = "0.0"
+fit_content = true
+autowrap_mode = 0
+
+[node name="STDDEV-Value" type="RichTextLabel" parent="Indicator-BarSymbol-STDDEV/TooltipContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/normal_font_size = 8
+text = "0.0"
+fit_content = true
+autowrap_mode = 0
+
+[node name="TextureRect" type="TextureRect" parent="Indicator-BarSymbol-STDDEV"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -12.5
+offset_right = 12.5
+offset_bottom = 25.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+texture = ExtResource("1_5uudm")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Indicator-BarSymbol-STDDEV"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.5
+offset_top = 27.0
+offset_right = 20.5
+offset_bottom = 50.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 10
+text = "STD DEV"
+horizontal_alignment = 1
+
+[node name="Indicator-BarSymbol-SCORES" type="Control" parent="."]
+custom_minimum_size = Vector2(41, 41)
+layout_mode = 2
+size_flags_vertical = 4
+script = ExtResource("4_2rtx3")
+
+[node name="TooltipContainer" type="CenterContainer" parent="Indicator-BarSymbol-SCORES"]
+visible = false
+z_index = 1
+layout_mode = 0
+offset_left = 42.0
+offset_right = 142.0
+offset_bottom = 54.0
+
+[node name="TextureRect" type="ColorRect" parent="Indicator-BarSymbol-SCORES/TooltipContainer"]
+custom_minimum_size = Vector2(100, 54)
+layout_mode = 2
+color = Color(0.24, 0.24, 0.24, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Indicator-BarSymbol-SCORES/TooltipContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Indicator-BarSymbol-SCORES/TooltipContainer/HBoxContainer"]
+custom_minimum_size = Vector2(55, 54)
+layout_mode = 2
+
+[node name="TOPX-Label" type="RichTextLabel" parent="Indicator-BarSymbol-SCORES/TooltipContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 8
+text = "Top X Scores: "
+fit_content = true
+autowrap_mode = 0
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Indicator-BarSymbol-SCORES/TooltipContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="TOPX-Value" type="RichTextLabel" parent="Indicator-BarSymbol-SCORES/TooltipContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/normal_font_size = 8
+text = "0.0"
+fit_content = true
+autowrap_mode = 0
+
+[node name="TextureRect" type="TextureRect" parent="Indicator-BarSymbol-SCORES"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -12.5
+offset_right = 12.5
+offset_bottom = 25.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+texture = ExtResource("5_1isug")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Indicator-BarSymbol-SCORES"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.5
+offset_top = 27.0
+offset_right = 20.5
+offset_bottom = 50.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 10
+text = "SCORES"
+horizontal_alignment = 1
+
+[connection signal="mouse_entered" from="Indicator-BarSymbol-STDDEV" to="Indicator-BarSymbol-STDDEV" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Indicator-BarSymbol-STDDEV" to="Indicator-BarSymbol-STDDEV" method="_on_mouse_exited"]
+[connection signal="mouse_entered" from="Indicator-BarSymbol-SCORES" to="Indicator-BarSymbol-SCORES" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Indicator-BarSymbol-SCORES" to="Indicator-BarSymbol-SCORES" method="_on_mouse_exited"]

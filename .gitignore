@@ -216,3 +216,15 @@ __marimo__/
 #Virtual Environment
 venv/
 venv/** */
+# ── Portfolio rework (2026-11) ─────────────────────────────────────────
+# Godot: import cache, local editor binary, desktop exports
+frontend/.godot/
+frontend/tools/
+frontend/build/
+# Census/ACS DuckDB caches (rebuilt from the Census API on first run)
+*.duckdb
+*.duckdb.wal
+# Screening/training outputs (regenerated; the demo uses frontend/demo/)
+server/results/
+# Office lock files
+.~lock*

@@ -1,0 +1,258 @@
+[gd_scene load_steps=9 format=3 uid="uid://bs7h36mp552xj"]
+
+[ext_resource type="Script" uid="uid://d1lsu5ivh7uuo" path="res://scripts/controls/file_upload_control-sccript.gd" id="1_0fbet"]
+[ext_resource type="Script" uid="uid://dg467s1u124au" path="res://scripts/controls/tab_container-script.gd" id="1_62e2m"]
+[ext_resource type="PackedScene" uid="uid://bgumvyo244bvh" path="res://spreadsheet_preview.tscn" id="3_ee4bf"]
+[ext_resource type="PackedScene" uid="uid://cql8f8nubx7to" path="res://screening_results_control.tscn" id="4_kbped"]
+[ext_resource type="PackedScene" uid="uid://bvojfg6asrina" path="res://results_control.tscn" id="6_fj5cn"]
+[ext_resource type="Script" path="res://scripts/controls/year_range_slider.gd" id="7_yrslider"]
+[ext_resource type="Script" path="res://scripts/controls/explanation_cards.gd" id="8_cards"]
+[ext_resource type="Script" path="res://scripts/theme/theme_toggle.gd" id="9_arcade"]
+
+[node name="Application" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 240.0
+offset_top = 12.0
+offset_right = -240.0
+offset_bottom = 40.0
+grow_horizontal = 2
+mouse_filter = 2
+text = "Hierarchical Census Feature Selector Framework"
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+
+[node name="Main" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="TabContainer" type="TabContainer" parent="Main"]
+custom_minimum_size = Vector2(900, 460)
+layout_mode = 2
+current_tab = 0
+script = ExtResource("1_62e2m")
+
+[node name="Dataset" type="Control" parent="Main/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="FileUploadControl" type="VBoxContainer" parent="Main/TabContainer/Dataset" node_paths=PackedStringArray("sites_vbox", "crops_vbox")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 14
+script = ExtResource("1_0fbet")
+loader_option_button_path = NodePath("HBoxContainer2/Loader VBox/LoaderOptions")
+years_item_list_path = NodePath("HBoxContainer2/Years VBox/YearsOptions")
+metrics_option_button_path = NodePath("HBoxContainer2/Metrics VBox/MetricsOptions")
+sites_option_button_path = NodePath("HBoxContainer2/Sites VBox/SitesOptions")
+crops_option_button_path = NodePath("HBoxContainer2/Crops VBox/CropsOptions")
+sites_vbox = NodePath("HBoxContainer2/Sites VBox")
+crops_vbox = NodePath("HBoxContainer2/Crops VBox")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Main/TabContainer/Dataset/FileUploadControl"]
+layout_mode = 2
+alignment = 1
+
+[node name="Spacer2" type="ColorRect" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer"]
+custom_minimum_size = Vector2(131.74, 0)
+layout_mode = 2
+color = Color(1, 1, 1, 0)
+
+[node name="CenterContainer2" type="CenterContainer" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer"]
+custom_minimum_size = Vector2(0, 31)
+layout_mode = 2
+
+[node name="Screening_Button" type="Button" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer/CenterContainer2"]
+layout_mode = 2
+disabled = true
+text = "Screen Dataset"
+
+[node name="Spacer3" type="ColorRect" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer"]
+custom_minimum_size = Vector2(131.74, 0)
+layout_mode = 2
+color = Color(1, 1, 1, 0)
+
+[node name="CenterContainer4" type="CenterContainer" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer"]
+custom_minimum_size = Vector2(0, 31)
+layout_mode = 2
+
+[node name="Training_Button" type="Button" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer/CenterContainer4"]
+layout_mode = 2
+disabled = true
+text = "Train"
+
+[node name="Spreadsheet-Preview" parent="Main/TabContainer/Dataset/FileUploadControl" instance=ExtResource("3_ee4bf")]
+visible = false
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Main/TabContainer/Dataset/FileUploadControl"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Spacer2" type="ColorRect" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer2"]
+layout_mode = 2
+color = Color(1, 1, 1, 0)
+
+[node name="Loader VBox" type="VBoxContainer" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer2"]
+layout_mode = 2
+
+[node name="LoaderLabel" type="Label" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer2/Loader VBox"]
+layout_mode = 2
+text = "Loader"
+
+[node name="LoaderOptions" type="OptionButton" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer2/Loader VBox"]
+layout_mode = 2
+
+[node name="Years VBox" type="VBoxContainer" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer2"]
+layout_mode = 2
+
+[node name="YearsLabel" type="Label" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer2/Years VBox"]
+layout_mode = 2
+text = "Years"
+
+[node name="YearsOptions" type="Control" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer2/Years VBox"]
+custom_minimum_size = Vector2(220, 52)
+layout_mode = 2
+script = ExtResource("7_yrslider")
+
+[node name="Metrics VBox" type="VBoxContainer" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer2"]
+layout_mode = 2
+
+[node name="MetricsLabel" type="Label" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer2/Metrics VBox"]
+layout_mode = 2
+text = "Metrics"
+
+[node name="MetricsOptions" type="OptionButton" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer2/Metrics VBox"]
+layout_mode = 2
+
+[node name="Sites VBox" type="VBoxContainer" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer2"]
+visible = false
+layout_mode = 2
+
+[node name="SitesLabel" type="Label" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer2/Sites VBox"]
+layout_mode = 2
+text = "Sites"
+
+[node name="SitesOptions" type="OptionButton" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer2/Sites VBox"]
+layout_mode = 2
+
+[node name="Crops VBox" type="VBoxContainer" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer2"]
+visible = false
+layout_mode = 2
+
+[node name="CropsLabel" type="Label" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer2/Crops VBox"]
+layout_mode = 2
+text = "Crops"
+
+[node name="CropsOptions" type="OptionButton" parent="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer2/Crops VBox"]
+layout_mode = 2
+
+[node name="ExplanationCards" type="Control" parent="Main/TabContainer/Dataset/FileUploadControl"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("8_cards")
+
+[node name="FileDialog" type="FileDialog" parent="Main/TabContainer/Dataset/FileUploadControl"]
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+filters = PackedStringArray("*.csv", "*.xls", "*.xlsx", "*.json")
+
+[node name="HTTPRequest" type="HTTPRequest" parent="Main/TabContainer/Dataset/FileUploadControl"]
+
+[node name="HTTPRequestHealth" type="HTTPRequest" parent="Main/TabContainer/Dataset/FileUploadControl"]
+
+[node name="HTTPRequestTemplate" type="HTTPRequest" parent="Main/TabContainer/Dataset/FileUploadControl"]
+
+[node name="Screening Results" type="Control" parent="Main/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="ScreeningResultsControl" parent="Main/TabContainer/Screening Results" instance=ExtResource("4_kbped")]
+layout_mode = 1
+offset_right = 0.0
+offset_bottom = 0.0
+
+[node name="ML Results" type="Control" parent="Main/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="ResultsControl" parent="Main/TabContainer/ML Results" instance=ExtResource("6_fj5cn")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+
+
+[node name="DemoModeCheckBox" type="CheckBox" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -228.0
+offset_top = 10.0
+offset_right = -16.0
+offset_bottom = 41.0
+grow_horizontal = 0
+tooltip_text = "Load precomputed results (lung cancer, opioid overdoses, UFO sightings) instead of calling the local Python servers."
+text = "DEMO MODE (precomputed)"
+
+[node name="ThemeToggle" type="CheckBox" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -228.0
+offset_top = 42.0
+offset_right = -16.0
+offset_bottom = 73.0
+grow_horizontal = 0
+tooltip_text = "Rooftop theme on, or Godot's default look off."
+button_pressed = true
+text = "ROOFTOP THEME"
+script = ExtResource("9_arcade")
+
+[connection signal="results_received" from="Main/TabContainer/Dataset/FileUploadControl" to="Main/TabContainer/Screening Results/ScreeningResultsControl" method="_on_results_received"]
+[connection signal="training_results_recieved" from="Main/TabContainer/Dataset/FileUploadControl" to="Main/TabContainer/ML Results/ResultsControl" method="receive_training_report"]
+[connection signal="pressed" from="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer/CenterContainer2/Screening_Button" to="Main/TabContainer/Dataset/FileUploadControl" method="_on_screening_button_pressed"]
+[connection signal="pressed" from="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer/CenterContainer4/Training_Button" to="Main/TabContainer/Dataset/FileUploadControl" method="_on_train_button_pressed"]
+[connection signal="item_selected" from="Main/TabContainer/Dataset/FileUploadControl/Spreadsheet-Preview/Controls/GroupContainer/GroupInput" to="Main/TabContainer/Dataset/FileUploadControl" method="_on_cancer_chosen"]
+[connection signal="column_title_clicked" from="Main/TabContainer/Dataset/FileUploadControl/Spreadsheet-Preview/Tree" to="Main/TabContainer/Dataset/FileUploadControl/Spreadsheet-Preview" method="_on_column_title_clicked"]
+[connection signal="item_selected" from="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer2/Loader VBox/LoaderOptions" to="Main/TabContainer/Dataset/FileUploadControl" method="_on_loader_option_selected"]
+[connection signal="item_selected" from="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer2/Metrics VBox/MetricsOptions" to="Main/TabContainer/Dataset/FileUploadControl" method="_on_metrics_option_selected"]
+[connection signal="item_selected" from="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer2/Sites VBox/SitesOptions" to="Main/TabContainer/Dataset/FileUploadControl" method="_on_sites_option_selected"]
+[connection signal="item_selected" from="Main/TabContainer/Dataset/FileUploadControl/HBoxContainer2/Crops VBox/CropsOptions" to="Main/TabContainer/Dataset/FileUploadControl" method="_on_crops_option_selected"]
+[connection signal="file_selected" from="Main/TabContainer/Dataset/FileUploadControl/FileDialog" to="Main/TabContainer/Dataset/FileUploadControl" method="_on_file_dialog_file_selected"]
+[connection signal="request_completed" from="Main/TabContainer/Dataset/FileUploadControl/HTTPRequest" to="Main/TabContainer/Dataset/FileUploadControl" method="_on_request_completed"]
+
+[editable path="Main/TabContainer/Dataset/FileUploadControl/Spreadsheet-Preview"]

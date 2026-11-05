@@ -1,0 +1,61 @@
+[gd_scene load_steps=4 format=3 uid="uid://bvojfg6asrina"]
+
+[ext_resource type="Script" uid="uid://co330f2mdt3cg" path="res://scripts/controls/results_control.gd" id="1_8rhuo"]
+[ext_resource type="Script" uid="uid://bpj8l8u081oni" path="res://scripts/controls/featurewise_scores.gd" id="2_2wqw4"]
+[ext_resource type="Script" uid="uid://dnanv1in6013" path="res://scripts/controls/pairwise_scores.gd" id="3_0stda"]
+
+[node name="ResultsControl" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8rhuo")
+year_option_path = NodePath("YearDropdown")
+summary_label_path = NodePath("SummaryLabel")
+sunburst_chart_path = NodePath("BoxContainer/TabContainer/Featurewise Scores")
+pairwise_heatmap_path = NodePath("BoxContainer/TabContainer/Pairwise Scores")
+
+[node name="BoxContainer" type="BoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="TabContainer" type="TabContainer" parent="BoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+current_tab = 0
+
+[node name="Featurewise Scores" type="Control" parent="BoxContainer/TabContainer"]
+layout_mode = 2
+script = ExtResource("2_2wqw4")
+metadata/_tab_index = 0
+
+[node name="Pairwise Scores" type="Control" parent="BoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+script = ExtResource("3_0stda")
+metadata/_tab_index = 1
+
+[node name="YearDropdown" type="OptionButton" parent="."]
+layout_mode = 0
+offset_left = 328.0
+offset_top = 5.0
+offset_right = 399.0
+offset_bottom = 25.0
+
+[node name="SummaryLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 406.0
+offset_top = 4.0
+offset_right = -16.0
+offset_bottom = 27.0
+grow_horizontal = 2
+text_overrun_behavior = 3

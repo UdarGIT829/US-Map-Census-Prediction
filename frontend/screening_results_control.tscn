@@ -1,0 +1,229 @@
+[gd_scene load_steps=5 format=3 uid="uid://cql8f8nubx7to"]
+
+[ext_resource type="Script" uid="uid://bg6br3ob8hew5" path="res://scripts/controls/screening_single_bar_chart.gd" id="1_ai2mw"]
+[ext_resource type="Script" uid="uid://b5km7qxpuk87t" path="res://scripts/controls/screening_results_control.gd" id="1_e04kt"]
+[ext_resource type="Script" uid="uid://bah7qlx5kxv8q" path="res://scripts/controls/screening_multiyear_heatmap.gd" id="3_k6pkd"]
+[ext_resource type="Script" uid="uid://mhod0paron6q" path="res://scripts/controls/screening_crossyear_bumpmap.gd" id="4_p0ueo"]
+
+[node name="ScreeningResultsControl" type="Control" node_paths=PackedStringArray("year_dropdown", "family_dropdown", "top_n_spinbox", "pass_only_checkbox", "bar_chart", "multi_year_heatmap", "crossyear_bumpmap")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_e04kt")
+year_dropdown = NodePath("TabContainer/SingleYearResults/VBoxContainer/HeaderRow/VBoxContainer/YearDropdown")
+family_dropdown = NodePath("TabContainer/SingleYearResults/VBoxContainer/HeaderRow/VBoxContainer2/FamilyDropdown")
+top_n_spinbox = NodePath("TabContainer/SingleYearResults/VBoxContainer/HeaderRow/VBoxContainer3/TopNSpinBox")
+pass_only_checkbox = NodePath("TabContainer/SingleYearResults/VBoxContainer/HeaderRow/PassOnlyCheckBox")
+bar_chart = NodePath("TabContainer/SingleYearResults/ScrollContainer/ScreeningSingleBarChart")
+multi_year_heatmap = NodePath("TabContainer/MultiYearResults/ScrollContainer/ScreeningMultiyearHeatmap")
+crossyear_bumpmap = NodePath("TabContainer/CrossYearResults/ScreeningCrossyearBumpmap")
+
+[node name="TabContainer" type="TabContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 0
+
+[node name="SingleYearResults" type="Control" parent="TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/SingleYearResults"]
+layout_mode = 0
+offset_right = 265.0
+offset_bottom = 65.0
+
+[node name="HeaderRow" type="HBoxContainer" parent="TabContainer/SingleYearResults/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/SingleYearResults/VBoxContainer/HeaderRow"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/SingleYearResults/VBoxContainer/HeaderRow/VBoxContainer"]
+layout_mode = 2
+text = "Year"
+
+[node name="YearDropdown" type="OptionButton" parent="TabContainer/SingleYearResults/VBoxContainer/HeaderRow/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="TabContainer/SingleYearResults/VBoxContainer/HeaderRow"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="TabContainer/SingleYearResults/VBoxContainer/HeaderRow/VBoxContainer2"]
+layout_mode = 2
+text = "Family"
+
+[node name="FamilyDropdown" type="OptionButton" parent="TabContainer/SingleYearResults/VBoxContainer/HeaderRow/VBoxContainer2"]
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="TabContainer/SingleYearResults/VBoxContainer/HeaderRow"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="TabContainer/SingleYearResults/VBoxContainer/HeaderRow/VBoxContainer3"]
+layout_mode = 2
+text = "Top N"
+
+[node name="TopNSpinBox" type="SpinBox" parent="TabContainer/SingleYearResults/VBoxContainer/HeaderRow/VBoxContainer3"]
+layout_mode = 2
+
+[node name="PassOnlyCheckBox" type="CheckBox" parent="TabContainer/SingleYearResults/VBoxContainer/HeaderRow"]
+layout_mode = 2
+text = "Pass Only"
+
+[node name="LegendContainer" type="VBoxContainer" parent="TabContainer/SingleYearResults"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -262.0
+offset_top = 6.0
+offset_right = -55.0
+offset_bottom = 82.0
+grow_horizontal = 0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/SingleYearResults/LegendContainer"]
+layout_mode = 2
+text = "Legend"
+fit_content = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/SingleYearResults/LegendContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DP02-VBox" type="VBoxContainer" parent="TabContainer/SingleYearResults/LegendContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/SingleYearResults/LegendContainer/HBoxContainer/DP02-VBox"]
+layout_mode = 2
+text = "DP02"
+fit_content = true
+
+[node name="ColorRect" type="ColorRect" parent="TabContainer/SingleYearResults/LegendContainer/HBoxContainer/DP02-VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+color = Color(1, 0, 0, 1)
+
+[node name="VSeparator" type="VSeparator" parent="TabContainer/SingleYearResults/LegendContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="DP03-VBox" type="VBoxContainer" parent="TabContainer/SingleYearResults/LegendContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/SingleYearResults/LegendContainer/HBoxContainer/DP03-VBox"]
+layout_mode = 2
+text = "DP03"
+fit_content = true
+
+[node name="ColorRect" type="ColorRect" parent="TabContainer/SingleYearResults/LegendContainer/HBoxContainer/DP03-VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+color = Color(1, 0, 0, 1)
+
+[node name="VSeparator2" type="VSeparator" parent="TabContainer/SingleYearResults/LegendContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="DP04-VBox" type="VBoxContainer" parent="TabContainer/SingleYearResults/LegendContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/SingleYearResults/LegendContainer/HBoxContainer/DP04-VBox"]
+layout_mode = 2
+text = "DP04"
+fit_content = true
+
+[node name="ColorRect" type="ColorRect" parent="TabContainer/SingleYearResults/LegendContainer/HBoxContainer/DP04-VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+color = Color(1, 0, 0, 1)
+
+[node name="VSeparator3" type="VSeparator" parent="TabContainer/SingleYearResults/LegendContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="DP05-VBox" type="VBoxContainer" parent="TabContainer/SingleYearResults/LegendContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/SingleYearResults/LegendContainer/HBoxContainer/DP05-VBox"]
+layout_mode = 2
+text = "DP05"
+fit_content = true
+
+[node name="ColorRect" type="ColorRect" parent="TabContainer/SingleYearResults/LegendContainer/HBoxContainer/DP05-VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+color = Color(1, 0, 0, 1)
+
+[node name="HSeparator" type="HSeparator" parent="TabContainer/SingleYearResults"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 35.0
+offset_right = -30.0
+offset_bottom = 90.71
+grow_horizontal = 2
+
+[node name="HSeparator2" type="HSeparator" parent="TabContainer/SingleYearResults"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 88.085
+offset_right = -30.0
+offset_bottom = 92.085
+grow_horizontal = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/SingleYearResults"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 97.0
+offset_right = -55.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScreeningSingleBarChart" type="Control" parent="TabContainer/SingleYearResults/ScrollContainer"]
+layout_mode = 2
+script = ExtResource("1_ai2mw")
+
+[node name="MultiYearResults" type="Control" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/MultiYearResults"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScreeningMultiyearHeatmap" type="Control" parent="TabContainer/MultiYearResults/ScrollContainer"]
+layout_mode = 2
+script = ExtResource("3_k6pkd")
+
+[node name="CrossYearResults" type="Control" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="ScreeningCrossyearBumpmap" type="Control" parent="TabContainer/CrossYearResults"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_p0ueo")
