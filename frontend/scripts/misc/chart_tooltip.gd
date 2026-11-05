@@ -24,8 +24,10 @@ static func make(for_text: String) -> Control:
 	var style: StyleBox
 
 	if theme_name == "rooftop":
-		## Dark static-grain block with a thick red edge, light text.
-		style = RooftopTheme.grain_box(RooftopTheme.RED, 5, 10, 10, 6)
+		## Godot wraps custom tooltips in its own TooltipPanel, which the
+		## Rooftop theme already styles as the static block with a red edge.
+		## Draw nothing here, or the edge (and the static) appear twice.
+		style = StyleBoxEmpty.new()
 		title_color = RooftopTheme.WHITE
 		detail_color = RooftopTheme.TEXT_MUTED
 	else:
