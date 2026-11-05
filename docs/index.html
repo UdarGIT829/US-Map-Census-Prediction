@@ -28,7 +28,7 @@
     --grain-size: 256px;
   }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; }   /* nav links land below the fixed bar */
   body {
     margin: 0;
     font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "Open Sans", sans-serif;
@@ -75,7 +75,16 @@
   .edge { border-left: 5px solid var(--red); }
 
   /* ── Header ──────────────────────────────────────────────────────────── */
-  header { position: absolute; inset: 0 0 auto 0; z-index: 2; }
+  header {
+    position: fixed; inset: 0 0 auto 0; z-index: 10;
+    transition: background-color .25s ease, box-shadow .25s ease;
+  }
+  /* Transparent over the hero; frosted once the page scrolls. */
+  header.scrolled {
+    background: rgba(244, 248, 253, .86);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 2px 0 var(--red), 0 6px 20px rgba(20, 30, 60, .10);
+  }
   header .wrap { display: flex; justify-content: space-between; align-items: center; height: 68px; }
   header .name { font-weight: 800; font-style: italic; font-size: 19px; text-decoration: none; color: var(--ink); }
   header nav { display: flex; align-items: center; gap: 4px; }
@@ -333,6 +342,15 @@
   })();
 </script>
 <script type="module" src="assets/city.js"></script>
+<script>
+  // Frost the fixed top bar once the page is scrolled.
+  (function () {
+    var h = document.querySelector("header");
+    function update() { h.classList.toggle("scrolled", window.scrollY > 8); }
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+  })();
+</script>
 <script>
   // No WebGL / module support: show the still render instead.
   setTimeout(function () {
