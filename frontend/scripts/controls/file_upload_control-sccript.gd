@@ -260,6 +260,48 @@ func _apply_template(tmpl: Dictionary) -> void:
 	_populate_loader_options(_template)
 	template_received.emit(_template)
 	_update_explanation()
+	if OS.has_feature("web") and not _web_example_shown:
+		_web_example_shown = true
+		_show_web_example.call_deferred()
+
+
+# ── Web example ───────────────────────────────────────────────────────────────
+
+## The web demo opens already showing results rather than an empty form:
+## lung cancer is picked in the Dataset tab, both stages run on the bundled
+## results, and the Screening Results tab is brought to the front. Every
+## control stays live, so visitors can pick another dataset straight away.
+const WEB_EXAMPLE_LOADER := "cancer"
+const WEB_EXAMPLE_SITE := "Lung and Bronchus"
+var _web_example_shown := false
+
+
+func _show_web_example() -> void:
+	if not _select_option(loader_option_button_path, WEB_EXAMPLE_LOADER, _on_loader_option_selected):
+		return
+	_select_option(sites_option_button_path, WEB_EXAMPLE_SITE, _on_sites_option_selected)
+	if _missing_for_screening() != "":
+		return
+	_pending_signature = _selection_signature()
+	await _run_demo("screening")
+	if _missing_for_training() == "":
+		await _run_demo("training")
+	var tabs := get_parent().get_parent() as TabContainer   # Dataset tab -> TabContainer
+	if tabs != null and tabs.get_tab_count() > 1:
+		tabs.current_tab = 1
+
+
+## Selects the item whose metadata is value and runs its handler. False if absent.
+func _select_option(path: NodePath, value: String, handler: Callable) -> bool:
+	var btn: OptionButton = get_node_or_null(path)
+	if btn == null:
+		return false
+	for i in btn.item_count:
+		if str(btn.get_item_metadata(i)) == value:
+			btn.select(i)
+			handler.call(i)
+			return true
+	return false
 
 
 # ── Dataset explanation cards ─────────────────────────────────────────────────
