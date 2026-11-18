@@ -289,6 +289,47 @@ func _show_web_example() -> void:
 	var tabs := get_parent().get_parent() as TabContainer   # Dataset tab -> TabContainer
 	if tabs != null and tabs.get_tab_count() > 1:
 		tabs.current_tab = 1
+		_start_tour(tabs)
+
+
+## A guided tour for first-time web visitors, reopened with the "?" button
+## just right of the last tab.
+func _start_tour(tabs: TabContainer) -> void:
+	var results := tabs.get_child(1)
+	var chart: Control = results.find_child("ScrollContainer", true, false)
+	var controls: Control = results.find_child("HeaderRow", true, false)
+	var loader: Control = get_node_or_null(loader_option_button_path)
+	var tour := GuidedTour.new()
+	get_tree().root.add_child(tour)
+	# The "?" sits just right of the last tab (the rest of that row is free).
+	var help := tour.add_help_button(null, func() -> Vector2:
+		var last := GuidedTour.tab_rect(tabs, tabs.get_tab_count() - 1)
+		return Vector2(last.end.x + 12, last.position.y + (last.size.y - 34) / 2))
+	var show_tab := func(i: int) -> void: tabs.current_tab = i
+	tour.steps = [
+		{"title": "Which Census figures explain a dataset?",
+		 "text": "This is my M.S. capstone. Give it any state- or county-level dataset and it searches thousands of U.S. Census figures for the ones that best explain it.\n\nYou're looking at [b]lung cancer counts by state[/b], from results bundled with this demo.",
+		 "before": show_tab.bind(1), "target": func() -> Rect2: return GuidedTour.tab_rect(tabs, 1)},
+		{"title": "The ranking",
+		 "text": "Each bar is one Census figure, ranked by how closely it tracks lung cancer across the states ([b]1.0[/b] would mean they rise and fall together). The colors show which Census table it comes from.",
+		 "before": show_tab.bind(1), "target": func() -> Rect2: return GuidedTour.rect_of(chart)},
+		{"title": "Why widowed men, or six-room homes?",
+		 "text": "Many top figures simply grow with population, and so do raw cancer counts. Spotting that is part of the job: the project report shows how to correct for it with per-person rates.",
+		 "before": show_tab.bind(1), "target": func() -> Rect2: return GuidedTour.rect_of(chart)},
+		{"title": "Explore",
+		 "text": "Change the year, filter by family of figures, or show more bars.",
+		 "before": show_tab.bind(1), "target": func() -> Rect2: return GuidedTour.rect_of(controls)},
+		{"title": "Stage two: models",
+		 "text": "The ML Results tab builds small machine-learning models from combinations of the shortlisted figures and scores how well each predicts the target.",
+		 "before": show_tab.bind(1), "target": func() -> Rect2: return GuidedTour.tab_rect(tabs, 2)},
+		{"title": "Try another dataset",
+		 "text": "Pick [b]opioid overdose deaths[/b], or [b]UFO sightings[/b] (a deliberate stress test), under Loader, then press [b]Screen Dataset[/b].",
+		 "before": show_tab.bind(0), "target": func() -> Rect2: return GuidedTour.rect_of(loader)},
+		{"title": "That's the tour",
+		 "text": "Reopen it any time with this [b]?[/b] button.",
+		 "target": func() -> Rect2: return GuidedTour.rect_of(help)},
+	]
+	tour.start_if_new()
 
 
 ## Selects the item whose metadata is value and runs its handler. False if absent.
